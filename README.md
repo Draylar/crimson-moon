@@ -13,3 +13,8 @@ Crimson Moon has a number of config options which you can edit in `config/crimso
 
 ### Licensing
 Crimson Moon is MIT, and you are free to use the code/assets in this repo as you wish.
+
+### Gallery
+![](resources/red.png)
+
+![](resources/moon.png)
