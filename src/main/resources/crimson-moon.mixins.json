@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "draylar.crimsonmoon.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BedBlockMixin",
+    "MobEntityMixin",
+    "WorldMixin"
+  ],
+  "client": [
+    "WorldRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

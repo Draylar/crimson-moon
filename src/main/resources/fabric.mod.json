@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "crimsonmoon",
+  "version": "${version}",
+  "name": "Crimson Moon",
+  "description": "Every so often... a Crimson Moon appears, accompanied by the howls of mobs across the lands.",
+  "authors": [
+    "Draylar"
+  ],
+  "license": "MIT",
+  "icon": "assets/crimsonmoon/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "draylar.crimsonmoon.CrimsonMoon"
+    ],
+    "client": [
+      "draylar.crimsonmoon.CrimsonMoonClient"
+    ]
+  },
+  "mixins": [
+    "crimson-moon.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.8.2+build.194",
+    "fabric": "*",
+    "minecraft": "1.15.2"
+  }
+}

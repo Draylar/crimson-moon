@@ -1,0 +1,80 @@
+package draylar.crimsonmoon;
+
+import draylar.crimsonmoon.cca.WorldCrimsonMoonComponent;
+import draylar.crimsonmoon.config.CrimsonMoonConfig;
+import draylar.crimsonmoon.util.WorldUtils;
+import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
+import me.sargunvohra.mcmods.autoconfig1u.serializer.JanksonConfigSerializer;
+import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Jankson;
+import nerdhub.cardinal.components.api.ComponentRegistry;
+import nerdhub.cardinal.components.api.ComponentType;
+import nerdhub.cardinal.components.api.event.WorldComponentCallback;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.server.ServerTickCallback;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCategory;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.WeightedPicker;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
+
+import java.util.List;
+import java.util.Random;
+
+public class CrimsonMoon implements ModInitializer {
+
+    public static final ComponentType<WorldCrimsonMoonComponent> CRIMSON_MOON_COMPONENT = ComponentRegistry.INSTANCE.registerIfAbsent(id("crimsonmoon"), WorldCrimsonMoonComponent.class);
+    public static final CrimsonMoonConfig CONFIG = AutoConfig.register(CrimsonMoonConfig.class, JanksonConfigSerializer::new).getConfig();
+
+    @Override
+    public void onInitialize() {
+        WorldComponentCallback.EVENT.register((world, components) -> components.put(CRIMSON_MOON_COMPONENT, new WorldCrimsonMoonComponent(world)));
+
+        ServerTickCallback.EVENT.register(server -> {
+            server.getWorlds().forEach(world -> {
+                if (CRIMSON_MOON_COMPONENT.get(world).isCrimsonMoon() && world.random.nextInt(CONFIG.spawnDelaySeconds * 20) == 0) {
+                    if (world.getTimeOfDay() >= 13188) {
+                        WorldUtils.getLoadedChunks(world).forEach(chunk -> {
+                            ChunkPos pos = chunk.getPos();
+                            if (world.getEntities(null, new Box(pos.toBlockPos(0, 0, 0), pos.toBlockPos(16, 256, 16))).size() < CONFIG.maxMobCountPerChunk) {
+                                int randomX = world.random.nextInt(16);
+                                int randomZ = world.random.nextInt(16);
+                                ChunkPos chunkPos = chunk.getPos();
+
+                                int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING, chunkPos.getStartX() + randomX, chunkPos.getStartZ() + randomZ);
+                                BlockPos spawnPos = new BlockPos(chunkPos.getStartX() + randomX, y, chunkPos.getStartZ() + randomZ);
+
+                                Biome.SpawnEntry spawnEntry = pickRandomSpawnEntry(
+                                        world.getChunkManager().getChunkGenerator(),
+                                        EntityCategory.MONSTER,
+                                        world.getRandom(),
+                                        spawnPos
+                                );
+
+                                Entity entity = spawnEntry.type.create(world);
+                                entity.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                entity.updateTrackedPosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                entity.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                world.spawnEntity(entity);
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    }
+
+    private static Biome.SpawnEntry pickRandomSpawnEntry(ChunkGenerator<?> chunkGenerator, EntityCategory entityCategory, Random random, BlockPos pos) {
+        List<Biome.SpawnEntry> list = chunkGenerator.getEntitySpawnList(entityCategory, pos);
+        return list.isEmpty() ? null : WeightedPicker.getRandom(random, list);
+    }
+
+    public static Identifier id(String name) {
+        return new Identifier("crimsonmoon", name);
+    }
+}
