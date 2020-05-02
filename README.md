@@ -1,4 +1,8 @@
 # Crimson Moon
+[![CurseForge](http://cf.way2muchnoise.eu/full_380356_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/crimson-moon)
+[![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_380356_all.svg)](https://www.curseforge.com/minecraft/mc-mods/crimson-moon)
+[![](https://jitpack.io/v/Draylar/crimson-moon.svg)](https://jitpack.io/#Draylar/crimson-moon)
+
 Every so often... a Crimson Moon appears, accompanied by the howls of mobs across the lands.
 
 ![](resources/crimsonmoon.png)
