@@ -4,23 +4,22 @@ import draylar.crimsonmoon.cca.WorldCrimsonMoonComponent;
 import draylar.crimsonmoon.config.CrimsonMoonConfig;
 import draylar.crimsonmoon.util.WorldUtils;
 import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.GsonConfigSerializer;
 import me.sargunvohra.mcmods.autoconfig1u.serializer.JanksonConfigSerializer;
-import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Jankson;
 import nerdhub.cardinal.components.api.ComponentRegistry;
 import nerdhub.cardinal.components.api.ComponentType;
 import nerdhub.cardinal.components.api.event.WorldComponentCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.server.ServerTickCallback;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCategory;
+import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.WeightedPicker;
+import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
 import java.util.List;
@@ -51,9 +50,11 @@ public class CrimsonMoon implements ModInitializer {
 
                                 Biome.SpawnEntry spawnEntry = pickRandomSpawnEntry(
                                         world.getChunkManager().getChunkGenerator(),
-                                        EntityCategory.MONSTER,
+                                        SpawnGroup.MONSTER,
                                         world.getRandom(),
-                                        spawnPos
+                                        spawnPos,
+                                        world.getStructureAccessor(),
+                                        world.getBiome(spawnPos)
                                 );
 
                                 Entity entity = spawnEntry.type.create(world);
@@ -69,8 +70,8 @@ public class CrimsonMoon implements ModInitializer {
         });
     }
 
-    private static Biome.SpawnEntry pickRandomSpawnEntry(ChunkGenerator<?> chunkGenerator, EntityCategory entityCategory, Random random, BlockPos pos) {
-        List<Biome.SpawnEntry> list = chunkGenerator.getEntitySpawnList(entityCategory, pos);
+    private static Biome.SpawnEntry pickRandomSpawnEntry(ChunkGenerator chunkGenerator, SpawnGroup spawnGroup, Random random, BlockPos pos, StructureAccessor accessor, Biome biome) {
+        List<Biome.SpawnEntry> list = chunkGenerator.getEntitySpawnList(biome, accessor, spawnGroup, pos);
         return list.isEmpty() ? null : WeightedPicker.getRandom(random, list);
     }
 

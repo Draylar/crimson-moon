@@ -23,7 +23,7 @@ public class BedBlockMixin {
     private void onTrySleep(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if(CrimsonMoon.CRIMSON_MOON_COMPONENT.get(player.world).isCrimsonMoon() && CrimsonMoon.CONFIG.disableBeds) {
             cir.setReturnValue(ActionResult.FAIL);
-            player.sendMessage(new TranslatableText("crimsonmoon.failed_sleep_" + world.random.nextInt(3)).formatted(Formatting.DARK_RED));
+            player.sendMessage(new TranslatableText("crimsonmoon.failed_sleep_" + world.random.nextInt(3)).formatted(Formatting.DARK_RED), true);
         }
     }
 }

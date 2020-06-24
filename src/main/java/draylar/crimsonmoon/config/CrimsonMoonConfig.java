@@ -11,7 +11,7 @@ public class CrimsonMoonConfig implements ConfigData {
     public int spawnDelaySeconds = 5;
 
     @Comment(value = "Maximum amount of mobs allowed in a chunk when spawning new ones during a crimson moon.")
-    public int maxMobCountPerChunk = 5;
+    public int maxMobCountPerChunk = 3;
 
     @Comment(value = "Whether or not beds are disabled during a crimson moon.")
     public boolean disableBeds = true;
