@@ -9,6 +9,7 @@ import nerdhub.cardinal.components.api.ComponentRegistry;
 import nerdhub.cardinal.components.api.ComponentType;
 import nerdhub.cardinal.components.api.event.WorldComponentCallback;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.server.ServerTickCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnGroup;
@@ -34,7 +35,7 @@ public class CrimsonMoon implements ModInitializer {
     public void onInitialize() {
         WorldComponentCallback.EVENT.register((world, components) -> components.put(CRIMSON_MOON_COMPONENT, new WorldCrimsonMoonComponent(world)));
 
-        ServerTickCallback.EVENT.register(server -> {
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
             server.getWorlds().forEach(world -> {
                 if (CRIMSON_MOON_COMPONENT.get(world).isCrimsonMoon() && world.random.nextInt(CONFIG.spawnDelaySeconds * 20) == 0) {
                     if (world.getTimeOfDay() >= 13188) {
@@ -57,11 +58,16 @@ public class CrimsonMoon implements ModInitializer {
                                         world.getBiome(spawnPos)
                                 );
 
-                                Entity entity = spawnEntry.type.create(world);
-                                entity.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-                                entity.updateTrackedPosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-                                entity.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
-                                world.spawnEntity(entity);
+                                if(spawnEntry != null) {
+                                    Entity entity = spawnEntry.type.create(world);
+
+                                    if(entity != null) {
+                                        entity.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                        entity.updateTrackedPosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                        entity.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
+                                        world.spawnEntity(entity);
+                                    }
+                                }
                             }
                         });
                     }
