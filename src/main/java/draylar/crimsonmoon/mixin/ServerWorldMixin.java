@@ -22,8 +22,8 @@ import java.util.function.Supplier;
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends World {
 
-    private ServerWorldMixin(MutableWorldProperties mutableWorldProperties, RegistryKey<World> registryKey, RegistryKey<DimensionType> registryKey2, DimensionType dimensionType, Supplier<Profiler> profiler, boolean bl, boolean bl2, long l) {
-        super(mutableWorldProperties, registryKey, registryKey2, dimensionType, profiler, bl, bl2, l);
+    private ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DimensionType dimensionType, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed) {
+        super(properties, registryRef, dimensionType, profiler, isClient, debugWorld, seed);
     }
 
     @Inject(
@@ -38,12 +38,12 @@ public abstract class ServerWorldMixin extends World {
             // end of day
             if (cappedDayTime % 13000 == 0) {
                 // ~1/20 chance to start a blood moon
-                if (getWorld().random.nextInt(CrimsonMoon.CONFIG.crimsonMoonChance) == 0) {
-                    CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).setCrimsonMoon(true);
-                    CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).sync();
+                if (this.random.nextInt(CrimsonMoon.CONFIG.crimsonMoonChance) == 0) {
+                    CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(true);
+                    CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).sync();
 
                     // print message
-                    getWorld().getPlayers().forEach(player -> {
+                    this.getPlayers().forEach(player -> {
                         player.sendMessage(new TranslatableText("crimsonmoon.rising").formatted(Formatting.DARK_RED), false);
                     });
                 }
@@ -52,12 +52,12 @@ public abstract class ServerWorldMixin extends World {
 
         // morning time, end blood moon if it's active
         if (cappedDayTime % 23031 == 0) {
-            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).isCrimsonMoon()) {
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).setCrimsonMoon(false);
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).sync();
+            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).isCrimsonMoon()) {
+                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(false);
+                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).sync();
 
                 // print message
-                getWorld().getPlayers().forEach(player -> {
+                this.getPlayers().forEach(player -> {
                     player.sendMessage(new TranslatableText("crimsonmoon.ending").formatted(Formatting.DARK_RED), false);
                 });
             }
@@ -65,9 +65,9 @@ public abstract class ServerWorldMixin extends World {
 
         // make sure it's not day time with a bloodmoon for stuff like /time add, but don't log
         else if (cappedDayTime > 23031 || cappedDayTime < 13000) {
-            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).isCrimsonMoon()) {
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).setCrimsonMoon(false);
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(getWorld()).sync();
+            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).isCrimsonMoon()) {
+                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(false);
+                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).sync();
             }
         }
     }

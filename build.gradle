@@ -34,8 +34,6 @@ dependencies {
     include "io.github.ladysnake:Satin:${satin_version}"
 
     // config
-    modCompile "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
-    include "me.shedaniel.cloth:config-2:${project.cloth_config_version}"
     modCompile "me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}"
     include "me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}"
 

@@ -13,6 +13,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.server.ServerTickCallback;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.WeightedPicker;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +22,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.StructureAccessor;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 
@@ -41,7 +44,7 @@ public class CrimsonMoon implements ModInitializer {
                     if (world.getTimeOfDay() >= 13188) {
                         WorldUtils.getLoadedChunks(world).forEach(chunk -> {
                             ChunkPos pos = chunk.getPos();
-                            if (world.getEntities(null, new Box(pos.toBlockPos(0, 0, 0), pos.toBlockPos(16, 256, 16))).size() < CONFIG.maxMobCountPerChunk) {
+                            if (world.getEntitiesByClass(HostileEntity.class, new Box(pos.getStartPos(), pos.getStartPos().add(16, 256, 16)), e -> true).size() < CONFIG.maxMobCountPerChunk) {
                                 int randomX = world.random.nextInt(16);
                                 int randomZ = world.random.nextInt(16);
                                 ChunkPos chunkPos = chunk.getPos();
@@ -49,7 +52,7 @@ public class CrimsonMoon implements ModInitializer {
                                 int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING, chunkPos.getStartX() + randomX, chunkPos.getStartZ() + randomZ);
                                 BlockPos spawnPos = new BlockPos(chunkPos.getStartX() + randomX, y, chunkPos.getStartZ() + randomZ);
 
-                                Biome.SpawnEntry spawnEntry = pickRandomSpawnEntry(
+                                SpawnSettings.SpawnEntry spawnEntry = pickRandomSpawnEntry(
                                         world.getChunkManager().getChunkGenerator(),
                                         SpawnGroup.MONSTER,
                                         world.getRandom(),
@@ -76,8 +79,8 @@ public class CrimsonMoon implements ModInitializer {
         });
     }
 
-    private static Biome.SpawnEntry pickRandomSpawnEntry(ChunkGenerator chunkGenerator, SpawnGroup spawnGroup, Random random, BlockPos pos, StructureAccessor accessor, Biome biome) {
-        List<Biome.SpawnEntry> list = chunkGenerator.getEntitySpawnList(biome, accessor, spawnGroup, pos);
+    private static SpawnSettings.SpawnEntry pickRandomSpawnEntry(ChunkGenerator chunkGenerator, SpawnGroup spawnGroup, Random random, BlockPos pos, StructureAccessor accessor, Biome biome) {
+        List<SpawnSettings.SpawnEntry> list = chunkGenerator.getEntitySpawnList(biome, accessor, spawnGroup, pos);
         return list.isEmpty() ? null : WeightedPicker.getRandom(random, list);
     }
 
