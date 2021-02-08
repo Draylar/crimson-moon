@@ -2,11 +2,10 @@ package draylar.crimsonmoon.util;
 
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class WorldUtils {
 
@@ -16,30 +15,41 @@ public class WorldUtils {
      * @param world world to retrieve loaded chunks from
      * @return a list of loaded chunks in the given world
      */
-    public static List<WorldChunk> getLoadedChunks(ServerWorld world) {
-        ArrayList<WorldChunk> loadedChunks = new ArrayList<>();
+    public static Set<WorldChunk> getLoadedChunks(ServerWorld world) {
+        world.getProfiler().push("crimsonmoon_locatechunks");
+        Set<WorldChunk> loadedChunks = new HashSet<>();
+        Set<ChunkPos> occupiedChunks = new HashSet<>();
+
         int renderDistance = world.getServer().getPlayerManager().getViewDistance();
 
         world.getPlayers().forEach(player -> {
             ChunkPos playerChunkPos = new ChunkPos(player.getBlockPos());
-            WorldChunk chunk = world.getChunk(playerChunkPos.x, playerChunkPos.z);
 
-            if(!loadedChunks.contains(chunk)) {
-                loadedChunks.add(chunk);
+            // Keep track of the chunks each player is standing in.
+            // Mobs should not spawn directly next to players.
+            for(int x = -1; x <= 1; x++) {
+                for(int z = -1; z <= 1; z++) {
+                    occupiedChunks.add(new ChunkPos(playerChunkPos.getStartX() + x, playerChunkPos.getStartZ() + z));
+                }
             }
 
-            for(int x = -renderDistance; x <= renderDistance; x++) {
-                for(int z = -renderDistance; z <= renderDistance; z++) {
+            // Iterate over nearby chunks.
+            // We spawn mobs in all chunks within the render distance, halved, to save performance.
+            int spawnRadius = renderDistance / 2;
+            for(int x = -spawnRadius; x <= spawnRadius; x++) {
+                for(int z = -spawnRadius; z <= spawnRadius; z++) {
                     ChunkPos offsetChunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
                     WorldChunk offsetChunk = world.getChunk(offsetChunkPos.x, offsetChunkPos.z);
 
-                    if(!loadedChunks.contains(offsetChunk)) {
+                    // Only return unoccupied chunks (no players within a radius of 1 nearby).
+                    if(!occupiedChunks.contains(offsetChunkPos)) {
                         loadedChunks.add(offsetChunk);
                     }
                 }
             }
         });
 
+        world.getProfiler().pop();
         return loadedChunks;
     }
 }
