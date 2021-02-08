@@ -11,8 +11,7 @@ import nerdhub.cardinal.components.api.event.WorldComponentCallback;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.server.ServerTickCallback;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.*;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
@@ -65,6 +64,10 @@ public class CrimsonMoon implements ModInitializer {
                                     Entity entity = spawnEntry.type.create(world);
 
                                     if(entity != null) {
+                                        if(entity instanceof MobEntity) {
+                                            ((MobEntity) entity).initialize(world, world.getLocalDifficulty(spawnPos), SpawnReason.EVENT, null, null);
+                                        }
+
                                         entity.setPos(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
                                         entity.updateTrackedPosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
                                         entity.updatePosition(spawnPos.getX(), spawnPos.getY(), spawnPos.getZ());
