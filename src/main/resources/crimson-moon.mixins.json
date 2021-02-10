@@ -4,8 +4,18 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "BedBlockMixin",
+    "CrimsonMobEntityMixin",
+    "EnderDragonFightAccessor",
+    "FollowTargetGoalAccessor",
+    "GoalSelectorAccessor",
+    "MinecraftClientMixin",
+    "MobEntityAccessor",
     "MobEntityMixin",
-    "ServerWorldMixin"
+    "PlayerEntityMixin",
+    "ServerPlayerEntityMixin",
+    "ServerWorldAccessor",
+    "ServerWorldMixin",
+    "TargetPredicateAccessor"
   ],
   "client": [
     "WorldRendererMixin"
