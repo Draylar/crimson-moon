@@ -2,6 +2,7 @@ package draylar.crimsonmoon.item;
 
 import draylar.crimsonmoon.api.AttackingItem;
 import draylar.crimsonmoon.material.CrimsonToolMaterial;
+import draylar.crimsonmoon.mixin.LivingEntityAccessor;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -36,7 +37,7 @@ public class CarnageItem extends ToolItem implements AttackingItem {
     public void attack(PlayerEntity player, World world, ItemStack stack) {
         if(!world.isClient) {
             Vec3d rotationVector = player.getRotationVector();
-            Vec3d pos = player.getPos().add(rotationVector.multiply(2)).add(0, player.getEyeHeight(player.getPose()), 0);
+            Vec3d pos = player.getPos().add(rotationVector.multiply(2)).add(0, ((LivingEntityAccessor) player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0);
 
             world.getEntitiesByClass(LivingEntity.class, new Box(pos.x - 1, pos.y - .75, pos.z - 1, pos.x + 1, pos.y + .5, pos.z + 1), entity -> !entity.equals(player)).forEach(entity -> {
                 entity.damage(DamageSource.player(player), EnchantmentHelper.getAttackDamage(stack, entity.getGroup()) + 5);
