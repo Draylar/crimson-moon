@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "crimsonmoon:item/bloodthirsty_bow_pulling_3"
+  }
+}

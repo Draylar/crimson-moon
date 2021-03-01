@@ -10,6 +10,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.sound.PositionedSoundInstance;
@@ -114,6 +115,18 @@ public class CrimsonMoonClient implements ClientModInitializer {
             } else {
                 bannerTicks = 0;
             }
+        });
+
+        FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pull"), (itemStack, clientWorld, livingEntity) -> {
+            if (livingEntity == null) {
+                return 0.0F;
+            } else {
+                return livingEntity.getActiveItem() != itemStack ? 0.0F : (float)(itemStack.getMaxUseTime() - livingEntity.getItemUseTimeLeft()) / 20.0F;
+            }
+        });
+
+        FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pulling"), (itemStack, clientWorld, livingEntity) -> {
+            return livingEntity != null && livingEntity.isUsingItem() && livingEntity.getActiveItem() == itemStack ? 1.0F : 0.0F;
         });
     }
 

@@ -21,6 +21,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class CarnageItem extends ToolItem implements AttackingItem {
 
@@ -39,13 +41,23 @@ public class CarnageItem extends ToolItem implements AttackingItem {
             Vec3d rotationVector = player.getRotationVector();
             Vec3d pos = player.getPos().add(rotationVector.multiply(2)).add(0, ((LivingEntityAccessor) player).callGetEyeHeight(player.getPose(), player.getDimensions(player.getPose())), 0);
 
+            AtomicBoolean hit = new AtomicBoolean();
             world.getEntitiesByClass(LivingEntity.class, new Box(pos.x - 1, pos.y - .75, pos.z - 1, pos.x + 1, pos.y + .5, pos.z + 1), entity -> !entity.equals(player)).forEach(entity -> {
                 entity.damage(DamageSource.player(player), EnchantmentHelper.getAttackDamage(stack, entity.getGroup()) + 5);
 
+                // If the enemy being attacked by the Carnage was killed,
+                // heal the player for a single heart.
                 if(entity.isDead()) {
                     player.heal(2f);
                 }
+
+                hit.set(true);
             });
+
+            // damage tool if any mobs were hit
+            if(hit.get()) {
+                stack.damage(1, player, ((p) -> p.sendToolBreakStatus(player.getActiveHand())));
+            }
         }
     }
 
