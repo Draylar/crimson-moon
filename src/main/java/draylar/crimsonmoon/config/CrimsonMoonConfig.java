@@ -23,6 +23,9 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "Chance to spawn a crimson moon every night. 20 is approximately one crimson moon every 20 days.")
     public int crimsonMoonChance = 20;
 
+    @Comment(value = "Intensity of the red glow of the Crimson Moon. 0.4 is default, 1.0 is none.")
+    public double glowIntensity = 0.4;
+
     @Override
     public String getName() {
         return "crimsonmoon";

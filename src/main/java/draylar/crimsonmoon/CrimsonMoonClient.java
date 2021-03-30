@@ -37,16 +37,17 @@ public class CrimsonMoonClient implements ClientModInitializer {
         ShaderEffectRenderCallback.EVENT.register((v) -> {
             if (MinecraftClient.getInstance().world != null) {
                 if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(MinecraftClient.getInstance().world).isCrimsonMoon()) {
-                    float c = 0.4f;
+                    double glowIntensity = Math.max(0.0, Math.min(1.0, CrimsonMoon.CONFIG.glowIntensity)); // [0, 1]
+                    double remaining = 1 - glowIntensity;
                     long timeOfDay = CrimsonMoon.getTrueDayTime(MinecraftClient.getInstance().world);
 
                     if (banner) {
-                        c = 0.4f + 0.6f * (1 - (bannerTicks / 200f));
+                        glowIntensity = glowIntensity + remaining * (1 - (bannerTicks / 200f));
                     } else if (timeOfDay >= FADE_START && timeOfDay <= END_TIME) {
-                        c = 0.4f + 0.6f * ((timeOfDay - FADE_START) / 200f);
+                        glowIntensity = glowIntensity + remaining * ((timeOfDay - FADE_START) / 200f);
                     }
 
-                    CRIMSON_SHADER.setUniformValue("ColorModulate", 1.0f, c, c, 1.0f);
+                    CRIMSON_SHADER.setUniformValue("ColorModulate", 1.0f, (float) glowIntensity, (float) glowIntensity, 1.0f);
                     CRIMSON_SHADER.render(v);
                 }
             }
