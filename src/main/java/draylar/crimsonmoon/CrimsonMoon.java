@@ -10,13 +10,11 @@ import draylar.crimsonmoon.config.CrimsonMoonConfig;
 import draylar.crimsonmoon.network.ServerNetworking;
 import draylar.crimsonmoon.registry.CrimsonEventHandlers;
 import draylar.crimsonmoon.registry.CrimsonItems;
-import me.sargunvohra.mcmods.autoconfig1u.AutoConfig;
-import me.sargunvohra.mcmods.autoconfig1u.serializer.JanksonConfigSerializer;
+import draylar.omegaconfig.OmegaConfig;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -43,7 +41,7 @@ public class CrimsonMoon implements ModInitializer, WorldComponentInitializer {
     public static final ItemGroup GROUP = FabricItemGroupBuilder.build(id("group"), () -> new ItemStack(CrimsonItems.CARNAGE)).setTexture("crimson.png");
     public static final ComponentKey<CrimsonMoonComponent> CRIMSON_MOON_COMPONENT = ComponentRegistryV3.INSTANCE.getOrCreate(id("crimsonmoon"), CrimsonMoonComponent.class);
     public static final ComponentKey<ProgressComponent> PROGRESS = ComponentRegistryV3.INSTANCE.getOrCreate(id("progress"), ProgressComponent.class);
-    public static final CrimsonMoonConfig CONFIG = AutoConfig.register(CrimsonMoonConfig.class, JanksonConfigSerializer::new).getConfig();
+    public static final CrimsonMoonConfig CONFIG = OmegaConfig.register(CrimsonMoonConfig.class);
 
     @Override
     public void onInitialize() {

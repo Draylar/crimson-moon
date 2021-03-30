@@ -1,11 +1,9 @@
 package draylar.crimsonmoon.config;
 
-import me.sargunvohra.mcmods.autoconfig1u.ConfigData;
-import me.sargunvohra.mcmods.autoconfig1u.annotation.Config;
-import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.Comment;
+import draylar.omegaconfig.api.Comment;
+import draylar.omegaconfig.api.Config;
 
-@Config(name = "crimsonmoon")
-public class CrimsonMoonConfig implements ConfigData {
+public class CrimsonMoonConfig implements Config {
 
     @Comment(value = "Delay in seconds between each attempt to spawn a new mob in every loaded chunk during a crimson mood. Values less than 5 seconds may start to cause lag.")
     public int spawnDelaySeconds = 5;
@@ -24,4 +22,14 @@ public class CrimsonMoonConfig implements ConfigData {
 
     @Comment(value = "Chance to spawn a crimson moon every night. 20 is approximately one crimson moon every 20 days.")
     public int crimsonMoonChance = 20;
+
+    @Override
+    public String getName() {
+        return "crimsonmoon";
+    }
+
+    @Override
+    public String getExtension() {
+        return "json5";
+    }
 }

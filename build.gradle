@@ -16,7 +16,6 @@ minecraft {
 
 repositories {
     maven { url 'https://jitpack.io' }
-    maven { url = 'http://maven.sargunv.s3-website-us-west-2.amazonaws.com/' }
 }
 
 dependencies {
@@ -34,9 +33,9 @@ dependencies {
     modImplementation "io.github.ladysnake:Satin:${satin_version}"
     include "io.github.ladysnake:Satin:${satin_version}"
 
-    // config
-    modCompile "me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}"
-    include "me.sargunvohra.mcmods:autoconfig1u:${project.auto_config_version}"
+    // Config
+    modImplementation 'com.github.Draylar.omega-config:omega-config-base:1.0.4-beta'
+    include 'com.github.Draylar.omega-config:omega-config-base:1.0.4-beta:min'
 
     // dev modmenu
     modCompile "io.github.prospector:modmenu:${project.mod_menu_version}"
