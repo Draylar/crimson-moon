@@ -1,4 +1,4 @@
-package draylar.crimsonmoon.api;
+package draylar.crimsonmoon.api.event;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;

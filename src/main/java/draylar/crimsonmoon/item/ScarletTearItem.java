@@ -1,7 +1,9 @@
 package draylar.crimsonmoon.item;
 
 import draylar.crimsonmoon.CrimsonMoon;
-import draylar.crimsonmoon.api.CrimsonMoonEvents;
+import draylar.crimsonmoon.api.event.CrimsonMoonEvents;
+import draylar.crimsonmoon.data.CrimsonMoonData;
+import draylar.worlddata.api.WorldData;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -44,12 +46,13 @@ public class ScarletTearItem extends Item {
             if (!world.getRegistryKey().equals(World.END) && !world.getRegistryKey().equals(World.NETHER)) {
 
                 // don't double-stack in a world that already has an active crimson moon
-                if (!CrimsonMoon.CRIMSON_MOON_COMPONENT.get(world).isCrimsonMoon()) {
+                CrimsonMoonData moonData = WorldData.getData((ServerWorld) world, CrimsonMoon.CRIMSON_MOON_ACTIVE);
+                if (!moonData.isCrimsonMoon()) {
                     long trueDayTime = CrimsonMoon.getTrueDayTime(world);
 
                     // Check for valid Crimson Moon timing
                     if (trueDayTime >= 13000 && trueDayTime <= 23031) {
-                        CrimsonMoon.CRIMSON_MOON_COMPONENT.get(world).setCrimsonMoon(true);
+                        moonData.setCrimsonMoon(true);
                         CrimsonMoonEvents.START.invoker().run((ServerWorld) world);
                         ItemStack stackInHand = user.getStackInHand(hand);
                         stackInHand.decrement(1);

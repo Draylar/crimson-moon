@@ -6,10 +6,10 @@
     "BedBlockMixin",
     "CrimsonMobEntityMixin",
     "EnderDragonFightAccessor",
+    "EntityListAccessor",
     "FollowTargetGoalAccessor",
     "GoalSelectorAccessor",
     "LivingEntityAccessor",
-    "MinecraftClientMixin",
     "MobEntityAccessor",
     "MobEntityMixin",
     "PlayerEntityMixin",
@@ -19,7 +19,9 @@
     "TargetPredicateAccessor"
   ],
   "client": [
-    "WorldRendererMixin"
+    "MinecraftClientMixin",
+    "WorldRendererMixin",
+    "ShaderEffectAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -17,23 +17,15 @@
     ],
     "client": [
       "draylar.crimsonmoon.CrimsonMoonClient"
-    ],
-    "cardinal-components-world": [
-      "draylar.crimsonmoon.CrimsonMoon"
     ]
   },
   "mixins": [
-    "crimson-moon.mixins.json"
+    "crimson-moon.mixins.json",
+    "shaders.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.8.2+build.194",
     "fabric": "*",
-    "minecraft": ">=1.16"
-  },
-  "custom": {
-    "cardinal-components": [
-      "crimsonmoon:crimsonmoon",
-      "crimsonmoon:progress"
-    ]
+    "minecraft": ">=1.18"
   }
 }

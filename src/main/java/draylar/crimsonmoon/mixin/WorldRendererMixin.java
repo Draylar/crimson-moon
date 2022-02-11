@@ -1,10 +1,11 @@
 package draylar.crimsonmoon.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import draylar.crimsonmoon.CrimsonMoon;
+import draylar.crimsonmoon.CrimsonMoonClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Final;
@@ -18,47 +19,28 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(WorldRenderer.class)
 public class WorldRendererMixin {
 
-    @Unique
-    private static final Identifier CRIMSON_MOON_PHASES = CrimsonMoon.id("textures/environment/crimson_moon_phases.png");
-
-    @Unique
-    private static final Identifier CRIMSON_RAIN = CrimsonMoon.id("textures/environment/crimson_rain.png");
-
-    @Shadow @Final private TextureManager textureManager;
-
+    @Unique private static final Identifier CRIMSON_MOON_PHASES = CrimsonMoon.id("textures/environment/crimson_moon_phases.png");
+    @Unique private static final Identifier CRIMSON_RAIN = CrimsonMoon.id("textures/environment/crimson_rain.png");
     @Shadow @Final private static Identifier MOON_PHASES;
-
-    @Shadow private ClientWorld world;
-
     @Shadow @Final private static Identifier RAIN;
 
-    @Redirect(
-            method = "renderSky",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V", ordinal = 1
-            )
-    )
-    private void redirectMoonTexture(TextureManager textureManager, Identifier id) {
-        if(CrimsonMoon.CRIMSON_MOON_COMPONENT.get(world).isCrimsonMoon() && CrimsonMoon.CONFIG.customMoonTexture) {
-            this.textureManager.bindTexture(CRIMSON_MOON_PHASES);
+    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLjava/lang/Runnable;)V",
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1))
+    private void redirectMoonTexture(int i, Identifier identifier) {
+        if(CrimsonMoonClient.crimsonMoonPresent && CrimsonMoon.CONFIG.customMoonTexture) {
+            RenderSystem.setShaderTexture(0, CRIMSON_MOON_PHASES);
         } else {
-            this.textureManager.bindTexture(MOON_PHASES);
+            RenderSystem.setShaderTexture(0, MOON_PHASES);
         }
     }
 
-    @Redirect(
-            method = "renderWeather",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/texture/TextureManager;bindTexture(Lnet/minecraft/util/Identifier;)V", ordinal = 0
-            )
-    )
-    private void redirectRainTexture(TextureManager textureManager, Identifier id) {
-        if(CrimsonMoon.CRIMSON_MOON_COMPONENT.get(world).isCrimsonMoon() && CrimsonMoon.CONFIG.customRainTexture) {
-            this.textureManager.bindTexture(CRIMSON_RAIN);
+    @Redirect(method = "renderWeather",
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
+    private void redirectRainTexture(int i, Identifier identifier) {
+        if(CrimsonMoonClient.crimsonMoonPresent && CrimsonMoon.CONFIG.customRainTexture) {
+            RenderSystem.setShaderTexture(0, CRIMSON_RAIN);
         } else {
-            this.textureManager.bindTexture(RAIN);
+            RenderSystem.setShaderTexture(0, RAIN);
         }
     }
 }

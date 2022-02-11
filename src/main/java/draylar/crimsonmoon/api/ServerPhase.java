@@ -2,6 +2,7 @@ package draylar.crimsonmoon.api;
 
 import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.mixin.EnderDragonFightAccessor;
+import draylar.worlddata.api.WorldData;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
@@ -40,7 +41,6 @@ public enum ServerPhase {
     }
 
     public static ServerPhase calculate(MinecraftServer server) {
-        ServerWorld overworld = server.getWorld(World.OVERWORLD);
         ServerWorld end = server.getWorld(World.END);
 
         // If the Dragon has been killed, return POST_DRAGON.
@@ -53,7 +53,7 @@ public enum ServerPhase {
         }
 
         // If any player has visited the Nether, return NETHER.
-        if(CrimsonMoon.PROGRESS.get(overworld).hasVisitedNether()) {
+        if(WorldData.getGlobalData(server, CrimsonMoon.WORLD_PROGRESSION).hasVisitedNether()) {
             return NETHER;
         }
 

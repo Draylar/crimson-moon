@@ -5,14 +5,10 @@ import draylar.crimsonmoon.registry.CrimsonItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,16 +26,16 @@ public abstract class CrimsonMobEntityMixin extends LivingEntity implements Crim
     }
 
     @Inject(
-            method = "writeCustomDataToTag",
+            method = "writeCustomDataToNbt",
             at = @At("RETURN"))
-    private void onWriteData(CompoundTag tag, CallbackInfo ci) {
+    private void onWriteData(NbtCompound tag, CallbackInfo ci) {
         tag.putBoolean("IsCrimson", cm_isCrimson);
     }
 
     @Inject(
-            method = "readCustomDataFromTag",
+            method = "readCustomDataFromNbt",
             at = @At("RETURN"))
-    private void onReadData(CompoundTag tag, CallbackInfo ci) {
+    private void onReadData(NbtCompound tag, CallbackInfo ci) {
         cm_isCrimson = tag.getBoolean("IsCrimson");
     }
 

@@ -1,11 +1,11 @@
 package draylar.crimsonmoon.mixin;
 
 import draylar.crimsonmoon.CrimsonMoon;
-import draylar.crimsonmoon.api.CrimsonMoonEvents;
+import draylar.crimsonmoon.api.event.CrimsonMoonEvents;
+import draylar.crimsonmoon.data.CrimsonMoonData;
+import draylar.worlddata.api.WorldData;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.GameRules;
@@ -13,11 +13,9 @@ import net.minecraft.world.MutableWorldProperties;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.function.Supplier;
 
@@ -34,6 +32,7 @@ public abstract class ServerWorldMixin extends World {
     )
     private void setTime(long timeOfDay, CallbackInfo ci) {
         ServerWorld world = (ServerWorld) (Object) this;
+        CrimsonMoonData data = WorldData.getData(world, CrimsonMoon.CRIMSON_MOON_ACTIVE);
         long cappedDayTime = timeOfDay % 24000;
 
         // For now, End/Nether dimensions do NOT have Crimson Moons.
@@ -50,7 +49,7 @@ public abstract class ServerWorldMixin extends World {
 
                 ActionResult test = CrimsonMoonEvents.BEFORE_START.invoker().test(world);
                 if (test != ActionResult.FAIL) {
-                    CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(true);
+                    data.setCrimsonMoon(true);
                     CrimsonMoonEvents.START.invoker().run(world);
                 }
             }
@@ -58,16 +57,16 @@ public abstract class ServerWorldMixin extends World {
 
         // Morning time! Finish the Crimson Moon if it is active.
         if (cappedDayTime != 0 && cappedDayTime % 23031 == 0) {
-            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).isCrimsonMoon()) {
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(false);
+            if (data.isCrimsonMoon()) {
+                data.setCrimsonMoon(false);
                 CrimsonMoonEvents.END.invoker().run(world, false);
             }
         }
 
         // Ensure it is not day time with a Crimson Moon for cases like /time add, but don't log
         else if (cappedDayTime > 23031 || cappedDayTime < 13000) {
-            if (CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).isCrimsonMoon()) {
-                CrimsonMoon.CRIMSON_MOON_COMPONENT.get(this).setCrimsonMoon(false);
+            if (data.isCrimsonMoon()) {
+                data.setCrimsonMoon(false);
                 CrimsonMoonEvents.END.invoker().run(world, true);
             }
         }

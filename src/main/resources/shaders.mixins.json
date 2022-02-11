@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "draylar.shaders.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+
+  ],
+  "client": [
+    "GameRendererMixin",
+    "MinecraftClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

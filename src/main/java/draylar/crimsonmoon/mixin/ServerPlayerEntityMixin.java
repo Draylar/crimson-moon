@@ -1,6 +1,7 @@
 package draylar.crimsonmoon.mixin;
 
 import draylar.crimsonmoon.CrimsonMoon;
+import draylar.worlddata.api.WorldData;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -19,7 +20,7 @@ public class ServerPlayerEntityMixin {
     private void onChangeWorld(ServerWorld destination, CallbackInfoReturnable<Entity> cir) {
         // Player is traveling to the Nether
         if(destination.getRegistryKey().equals(World.NETHER)) {
-            CrimsonMoon.PROGRESS.get(destination.getServer().getWorld(World.OVERWORLD)).setHasVisitedNether(true);
+            WorldData.getGlobalData(destination.getServer(), CrimsonMoon.WORLD_PROGRESSION).setHasVisitedNether(true);
         }
     }
 }
