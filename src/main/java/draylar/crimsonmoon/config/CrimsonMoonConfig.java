@@ -20,8 +20,8 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "Whether or not rain should have a red-tinted texture during a crimson moon.")
     public boolean customRainTexture = true;
 
-    @Comment(value = "Chance to spawn a crimson moon every night. 20 is approximately one crimson moon every 20 days.")
-    public int crimsonMoonChance = 20;
+    @Comment(value = "The average number of days between each Crimson Moon. 20 is approximately one crimson moon every 20 days.")
+    public int averageNightsBetweenCrimsonMoons = 20;
 
     @Comment(value = "Intensity of the red glow of the Crimson Moon. 0.4 is default, 1.0 is none.")
     public double glowIntensity = 0.4;

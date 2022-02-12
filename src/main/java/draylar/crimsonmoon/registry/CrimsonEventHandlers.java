@@ -37,7 +37,7 @@ public class CrimsonEventHandlers {
     public static void register() {
         // Crimson Moons can only spawn if the config chance passes.
         CrimsonMoonEvents.BEFORE_START.register(world -> {
-            if(world.random.nextInt(CrimsonMoon.CONFIG.crimsonMoonChance) == 0) {
+            if(world.random.nextInt(CrimsonMoon.CONFIG.averageNightsBetweenCrimsonMoons) == 0) {
                 return ActionResult.PASS;
             }
 
