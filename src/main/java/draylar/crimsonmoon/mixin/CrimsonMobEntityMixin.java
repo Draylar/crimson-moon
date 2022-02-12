@@ -1,5 +1,6 @@
 package draylar.crimsonmoon.mixin;
 
+import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.api.Crimson;
 import draylar.crimsonmoon.registry.CrimsonItems;
 import net.minecraft.entity.EntityType;
@@ -53,7 +54,7 @@ public abstract class CrimsonMobEntityMixin extends LivingEntity implements Crim
             method = "dropLoot",
             at = @At("RETURN"))
     private void onDropLoot(DamageSource source, boolean causedByPlayer, CallbackInfo ci) {
-        if(!world.isClient && source.getSource() instanceof PlayerEntity) {
+        if(!world.isClient && source.getSource() instanceof PlayerEntity && CrimsonMoon.CONFIG.enableCustomItems) {
             if(cm_isCrimson) {
                 if(world.random.nextInt(25) == 0) {
                     ItemScatterer.spawn(world, getX(), getY(), getZ(), new ItemStack(CrimsonItems.SCARLET_GEM));

@@ -20,6 +20,10 @@ public class CrimsonItems {
     public static final Item SCARLET_GEM = register("scarlet_gem", new Item(new Item.Settings().group(CrimsonMoon.GROUP)));
 
     private static <T extends Item> T register(String name, T item) {
+        if(!CrimsonMoon.CONFIG.enableCustomItems) {
+            return item;
+        }
+
         return Registry.register(Registry.ITEM, CrimsonMoon.id(name), item);
     }
 

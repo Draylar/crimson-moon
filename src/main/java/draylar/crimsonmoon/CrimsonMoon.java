@@ -36,18 +36,22 @@ import java.util.Random;
 //    world.getTime() is world.getGameTime() in mojmap. It doesn't seem to be related to day time or the time command. guessing it's like a world age counter
 public class CrimsonMoon implements ModInitializer {
 
-    public static final ItemGroup GROUP = FabricItemGroupBuilder.build(id("group"), () -> new ItemStack(CrimsonItems.CARNAGE)).setTexture("crimson.png");
+    public static final ItemGroup GROUP = FabricItemGroupBuilder.build(id("group"), () -> new ItemStack(CrimsonMoon.CONFIG.enableCustomItems ? CrimsonItems.CARNAGE : Items.DIAMOND)).setTexture("crimson.png");
     public static final WorldDataKey<CrimsonMoonData> CRIMSON_MOON_ACTIVE = WorldDataRegistry.register(id("crimsonmoon"), CrimsonMoonData::new);
     public static final WorldDataKey<WorldProgressData> WORLD_PROGRESSION = WorldDataRegistry.registerGlobal(id("progress"), WorldProgressData::new);
     public static final CrimsonMoonConfig CONFIG = OmegaConfig.register(CrimsonMoonConfig.class);
 
     @Override
     public void onInitialize() {
-        CrimsonItems.init();
         ServerNetworking.init();
         CrimsonEventHandlers.register();
-        BrewingRecipeRegistry.ITEM_RECIPES.add(new BrewingRecipeRegistry.Recipe<>(Items.POTION, Ingredient.ofItems(CrimsonItems.SCARLET_GEM), CrimsonItems.CRIMSON_BREW));
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new DimensionChangeHandler());
+
+        // Only initialize items if the config option is enabled.
+        if(CONFIG.enableCustomItems) {
+            CrimsonItems.init();
+            BrewingRecipeRegistry.ITEM_RECIPES.add(new BrewingRecipeRegistry.Recipe<>(Items.POTION, Ingredient.ofItems(CrimsonItems.SCARLET_GEM), CrimsonItems.CRIMSON_BREW));
+        }
     }
 
     @Nullable

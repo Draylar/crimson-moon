@@ -26,6 +26,9 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "Intensity of the red glow of the Crimson Moon. 0.4 is default, 1.0 is none.")
     public double glowIntensity = 0.4;
 
+    @Comment(value = "If true, custom items are enabled. Make sure the values are the same on the client & server. Do not toggle this if you do not want to lose your custom items.")
+    public boolean enableCustomItems = true;
+
     @Override
     public String getName() {
         return "crimsonmoon";

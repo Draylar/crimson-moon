@@ -34,11 +34,15 @@ public class CrimsonMoonClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientNetworking.init();
         ShaderRenderingEvents.RENDER_SHADERS.register(new CrimsonShaderHandler());
-        ClientTickEvents.START_CLIENT_TICK.register(new AttackKeyHandler());
         ClientTickEvents.START_CLIENT_TICK.register(new BannerTickHandler());
         HudRenderCallback.EVENT.register(new BannerHudRenderer());
-        FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pull"), new BowPullPredicateProvider());
-        FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pulling"), new BowPullingPredicateProvider());
+
+        // Functionality dependent on config options
+        if(CrimsonMoon.CONFIG.enableCustomItems) {
+            ClientTickEvents.START_CLIENT_TICK.register(new AttackKeyHandler());
+            FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pull"), new BowPullPredicateProvider());
+            FabricModelPredicateProviderRegistry.register(CrimsonItems.BLOODTHIRSTY_BOW, new Identifier("pulling"), new BowPullingPredicateProvider());
+        }
     }
 
     public static void triggerBanner() {
