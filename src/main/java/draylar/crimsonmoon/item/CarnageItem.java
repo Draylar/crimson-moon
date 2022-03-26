@@ -1,14 +1,20 @@
 package draylar.crimsonmoon.item;
 
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import draylar.crimsonmoon.api.AttackingItem;
 import draylar.crimsonmoon.material.CrimsonToolMaterial;
 import draylar.crimsonmoon.mixin.LivingEntityAccessor;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.text.LiteralText;
 import net.minecraft.text.Style;
@@ -23,10 +29,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CarnageItem extends ToolItem implements AttackingItem {
+public class CarnageItem extends SwordItem implements AttackingItem {
 
     public CarnageItem(Settings settings) {
-        super(CrimsonToolMaterial.INSTANCE, settings);
+        super(CrimsonToolMaterial.INSTANCE, 0, -2.4f, settings);
     }
 
     @Override
@@ -69,5 +75,10 @@ public class CarnageItem extends ToolItem implements AttackingItem {
         tooltip.add(new LiteralText("When in Main Hand: ").formatted(Formatting.GRAY));
         tooltip.add(new LiteralText(" 5 Attack Damage").formatted(Formatting.DARK_GREEN));
         tooltip.add(new LiteralText(" Auto-swing").formatted(Formatting.DARK_GREEN));
+    }
+
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(EquipmentSlot slot) {
+        return ImmutableMultimap.of();
     }
 }
