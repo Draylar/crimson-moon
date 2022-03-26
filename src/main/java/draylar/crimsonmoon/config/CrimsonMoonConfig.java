@@ -14,6 +14,9 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "Whether or not beds are disabled during a crimson moon.")
     public boolean disableBeds = true;
 
+    @Comment(value = "Whether the red shader is enabled. Set this to false to disable the shader.")
+    public boolean enableShader = true;
+
     @Comment(value = "Whether or not the moon should have a red-tinted texture during a crimson moon.")
     public boolean customMoonTexture = true;
 

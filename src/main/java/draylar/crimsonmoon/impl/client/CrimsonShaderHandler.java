@@ -9,7 +9,7 @@ public class CrimsonShaderHandler implements ShaderRenderingEvents.RenderShader 
 
     @Override
     public void render(float delta) {
-        if(MinecraftClient.getInstance().world != null) {
+        if(MinecraftClient.getInstance().world != null && CrimsonMoon.CONFIG.enableShader) {
             if(CrimsonMoonClient.crimsonMoonPresent) {
                 double glowIntensity = Math.max(0.0, Math.min(1.0, CrimsonMoon.CONFIG.glowIntensity)); // [0, 1]
                 double remaining = 1 - glowIntensity;
