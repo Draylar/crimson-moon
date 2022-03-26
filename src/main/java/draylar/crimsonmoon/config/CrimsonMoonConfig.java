@@ -1,7 +1,13 @@
 package draylar.crimsonmoon.config;
 
+import com.google.common.collect.Sets;
 import draylar.omegaconfig.api.Comment;
 import draylar.omegaconfig.api.Config;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class CrimsonMoonConfig implements Config {
 
@@ -34,6 +40,12 @@ public class CrimsonMoonConfig implements Config {
 
     @Comment(value = "Base damage of the Carnage Weapon.")
     public int carnageDamage = 5;
+
+    @Comment(value = "A list of blocked mod IDs for Crimson Moon entity spawns.")
+    public Set<String> blacklistModid = new HashSet<>(List.of("mythicmounts"));
+
+    @Comment(value = "Blacklist of entity spawn IDs.")
+    public Set<String> blacklistedEntityID = new HashSet<>(List.of("minecraft:slime"));
 
     @Override
     public String getName() {

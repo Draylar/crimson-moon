@@ -22,6 +22,7 @@ import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.Pool;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.SpawnSettings;
@@ -56,8 +57,11 @@ public class CrimsonMoon implements ModInitializer {
 
     @Nullable
     public static SpawnSettings.SpawnEntry pickRandomSpawnEntry(ChunkGenerator chunkGenerator, SpawnGroup spawnGroup, Random random, BlockPos pos, StructureAccessor accessor, Biome biome) {
-        Pool<SpawnSettings.SpawnEntry> pool = chunkGenerator.getEntitySpawnList(biome, accessor, spawnGroup, pos);
-//        pool.removeIf(spawnEntry -> spawnEntry.type.equals(EntityType.SLIME));
+        Pool<SpawnSettings.SpawnEntry> pool = Pool.of(chunkGenerator.getEntitySpawnList(biome, accessor, spawnGroup, pos).getEntries().stream().filter(entry -> {
+            Identifier id = Registry.ENTITY_TYPE.getId(entry.type);
+            return !CrimsonMoon.CONFIG.blacklistModid.contains(id.getNamespace()) && !CrimsonMoon.CONFIG.blacklistedEntityID.contains(id.toString());
+        }).toList());
+
         return pool.getOrEmpty(random).orElse(null);
     }
 
