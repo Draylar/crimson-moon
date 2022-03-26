@@ -2,6 +2,7 @@ package draylar.crimsonmoon.item;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.api.AttackingItem;
 import draylar.crimsonmoon.material.CrimsonToolMaterial;
 import draylar.crimsonmoon.mixin.LivingEntityAccessor;
@@ -48,7 +49,7 @@ public class CarnageItem extends SwordItem implements AttackingItem {
 
             AtomicBoolean hit = new AtomicBoolean();
             world.getEntitiesByClass(LivingEntity.class, new Box(pos.x - 1, pos.y - .75, pos.z - 1, pos.x + 1, pos.y + .5, pos.z + 1), entity -> !entity.equals(player)).forEach(entity -> {
-                entity.damage(DamageSource.player(player), EnchantmentHelper.getAttackDamage(stack, entity.getGroup()) + 5);
+                entity.damage(DamageSource.player(player), EnchantmentHelper.getAttackDamage(stack, entity.getGroup()) + CrimsonMoon.CONFIG.carnageDamage);
 
                 // If the enemy being attacked by the Carnage was killed,
                 // heal the player for a single heart.

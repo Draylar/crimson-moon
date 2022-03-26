@@ -32,6 +32,9 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "If true, custom items are enabled. Make sure the values are the same on the client & server. Do not toggle this if you do not want to lose your custom items.")
     public boolean enableCustomItems = true;
 
+    @Comment(value = "Base damage of the Carnage Weapon.")
+    public int carnageDamage = 5;
+
     @Override
     public String getName() {
         return "crimsonmoon";
