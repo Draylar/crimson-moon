@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Environment(EnvType.CLIENT)
 @Mixin(MinecraftClient.class)
@@ -22,7 +23,7 @@ public class MinecraftClientMixin {
             method = "doAttack",
             at = @At("HEAD")
     )
-    private void onAttack(CallbackInfo ci) {
+    private void onAttack(CallbackInfoReturnable<Boolean> cir) {
         ClientAttackUtils.requestAttack(player);
     }
 }

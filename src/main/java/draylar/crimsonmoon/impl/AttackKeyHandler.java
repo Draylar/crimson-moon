@@ -12,7 +12,7 @@ public class AttackKeyHandler implements ClientTickEvents.StartTick {
     public void onStartTick(MinecraftClient client) {
         if (client.player == null) return;
 
-        if (client.options.keyAttack.isPressed()) {
+        if (client.options.attackKey.isPressed()) {
             if (client.player.getMainHandStack().getItem().equals(CrimsonItems.CARNAGE)) {
                 client.player.swingHand(Hand.MAIN_HAND);
 

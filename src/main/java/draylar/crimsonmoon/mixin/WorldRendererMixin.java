@@ -24,7 +24,7 @@ public class WorldRendererMixin {
     @Shadow @Final private static Identifier MOON_PHASES;
     @Shadow @Final private static Identifier RAIN;
 
-    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLjava/lang/Runnable;)V",
+    @Redirect(method = "renderSky(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FLnet/minecraft/client/render/Camera;ZLjava/lang/Runnable;)V",
             at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 1))
     private void redirectMoonTexture(int i, Identifier identifier) {
         if(CrimsonMoonClient.crimsonMoonPresent && CrimsonMoon.CONFIG.customMoonTexture) {

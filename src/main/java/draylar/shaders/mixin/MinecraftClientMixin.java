@@ -9,10 +9,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.RunArgs;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.gl.ShaderEffect;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.Window;
-import net.minecraft.resource.ReloadableResourceManager;
+import net.minecraft.resource.ReloadableResourceManagerImpl;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,9 +26,9 @@ import java.io.IOException;
 public abstract class MinecraftClientMixin {
 
     @Shadow @Final private TextureManager textureManager;
-    @Shadow @Final private ReloadableResourceManager resourceManager;
     @Shadow @Final private Framebuffer framebuffer;
     @Shadow public abstract Window getWindow();
+    @Shadow @Final private ReloadableResourceManagerImpl resourceManager;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void loadExternalShaders(RunArgs args, CallbackInfo ci) {
