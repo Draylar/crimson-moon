@@ -1,5 +1,6 @@
 package draylar.crimsonmoon.mixin;
 
+import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.registry.CrimsonItems;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,7 +24,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             at = @At("HEAD"),
             cancellable = true)
     private void attemptAttack(Entity target, CallbackInfo ci) {
-        if(getMainHandStack().getItem().equals(CrimsonItems.CARNAGE)) {
+        if(CrimsonMoon.CONFIG.enableCustomItems && getMainHandStack().getItem().equals(CrimsonItems.CARNAGE)) {
             ci.cancel();
         }
     }

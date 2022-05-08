@@ -1,5 +1,6 @@
 package draylar.crimsonmoon.impl;
 
+import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.api.ClientAttackUtils;
 import draylar.crimsonmoon.registry.CrimsonItems;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -12,7 +13,7 @@ public class AttackKeyHandler implements ClientTickEvents.StartTick {
     public void onStartTick(MinecraftClient client) {
         if (client.player == null) return;
 
-        if (client.options.attackKey.isPressed()) {
+        if (client.options.attackKey.isPressed() && CrimsonMoon.CONFIG.enableCustomItems) {
             if (client.player.getMainHandStack().getItem().equals(CrimsonItems.CARNAGE)) {
                 client.player.swingHand(Hand.MAIN_HAND);
 
