@@ -19,7 +19,12 @@ import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.ChunkPos;
@@ -45,6 +50,16 @@ public class CrimsonEventHandlers {
         });
 
         registerTickHandler();
+
+        // Send players an action bar message when the Crimson Moon is over
+        CrimsonMoonEvents.END.register((world, forced) -> {
+            if(!forced) {
+                MutableText message = new TranslatableText("crimsonmoon.ending").formatted(Formatting.RED);
+                for (ServerPlayerEntity player : world.getPlayers()) {
+                    player.sendMessage(message, true);
+                }
+            }
+        });
     }
 
     private static void registerTickHandler() {
