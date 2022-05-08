@@ -35,7 +35,7 @@ public class WorldRendererMixin {
     }
 
     @Redirect(method = "renderWeather",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V"))
+            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderTexture(ILnet/minecraft/util/Identifier;)V", ordinal = 0))
     private void redirectRainTexture(int i, Identifier identifier) {
         if(CrimsonMoonClient.crimsonMoonPresent && CrimsonMoon.CONFIG.customRainTexture) {
             RenderSystem.setShaderTexture(0, CRIMSON_RAIN);
