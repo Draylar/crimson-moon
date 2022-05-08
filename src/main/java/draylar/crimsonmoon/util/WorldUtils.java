@@ -1,5 +1,6 @@
 package draylar.crimsonmoon.util;
 
+import draylar.crimsonmoon.CrimsonMoon;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.WorldChunk;
@@ -36,6 +37,7 @@ public class WorldUtils {
             // Iterate over nearby chunks.
             // We spawn mobs in all chunks within the render distance, halved, to save performance.
             int spawnRadius = renderDistance / 2;
+            spawnRadius = Math.min(CrimsonMoon.CONFIG.maxChunkSpawnRadius, spawnRadius);
             for(int x = -spawnRadius; x <= spawnRadius; x++) {
                 for(int z = -spawnRadius; z <= spawnRadius; z++) {
                     ChunkPos offsetChunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);

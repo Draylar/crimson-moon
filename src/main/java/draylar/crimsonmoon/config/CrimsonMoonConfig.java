@@ -41,6 +41,9 @@ public class CrimsonMoonConfig implements Config {
     @Comment(value = "Base damage of the Carnage Weapon.")
     public int carnageDamage = 5;
 
+    @Comment(value = "Maximum number of chunks (as a radius) around a player to spawn entities during a Crimson Moon.")
+    public int maxChunkSpawnRadius = 8;
+
     @Comment(value = "A list of blocked mod IDs for Crimson Moon entity spawns.")
     public Set<String> blacklistModid = new HashSet<>(List.of("mythicmounts"));
 
