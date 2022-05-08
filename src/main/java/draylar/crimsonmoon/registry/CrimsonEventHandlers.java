@@ -4,13 +4,16 @@ import draylar.crimsonmoon.CrimsonMoon;
 import draylar.crimsonmoon.api.Crimson;
 import draylar.crimsonmoon.api.CrimsonMobHelper;
 import draylar.crimsonmoon.api.event.CrimsonMoonEvents;
+import draylar.crimsonmoon.impl.server.PlayerUpdateHandler;
 import draylar.crimsonmoon.mixin.EntityListAccessor;
 import draylar.crimsonmoon.mixin.GoalSelectorAccessor;
 import draylar.crimsonmoon.mixin.MobEntityAccessor;
 import draylar.crimsonmoon.mixin.ServerWorldAccessor;
 import draylar.crimsonmoon.util.WorldUtils;
 import draylar.worlddata.api.WorldData;
+import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
@@ -20,7 +23,6 @@ import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
@@ -48,6 +50,11 @@ public class CrimsonEventHandlers {
 
             return ActionResult.FAIL;
         });
+
+        // Update packets for players swapping worlds or re-joining during a Crimson Moon
+        PlayerUpdateHandler updateHandler = new PlayerUpdateHandler();
+        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(updateHandler);
+        ServerPlayConnectionEvents.JOIN.register(updateHandler);
 
         registerTickHandler();
 

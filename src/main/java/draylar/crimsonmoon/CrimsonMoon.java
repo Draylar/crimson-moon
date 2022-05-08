@@ -3,7 +3,6 @@ package draylar.crimsonmoon;
 import draylar.crimsonmoon.config.CrimsonMoonConfig;
 import draylar.crimsonmoon.data.CrimsonMoonData;
 import draylar.crimsonmoon.data.WorldProgressData;
-import draylar.crimsonmoon.impl.server.DimensionChangeHandler;
 import draylar.crimsonmoon.network.ServerNetworking;
 import draylar.crimsonmoon.registry.CrimsonEventHandlers;
 import draylar.crimsonmoon.registry.CrimsonItems;
@@ -12,7 +11,6 @@ import draylar.worlddata.api.WorldDataKey;
 import draylar.worlddata.api.WorldDataRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -47,7 +45,6 @@ public class CrimsonMoon implements ModInitializer {
     public void onInitialize() {
         ServerNetworking.init();
         CrimsonEventHandlers.register();
-        ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register(new DimensionChangeHandler());
 
         // Only initialize items if the config option is enabled.
         if(CONFIG.enableCustomItems) {
