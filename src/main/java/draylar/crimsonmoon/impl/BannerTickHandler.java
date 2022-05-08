@@ -3,8 +3,8 @@ package draylar.crimsonmoon.impl;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 
-import static draylar.crimsonmoon.CrimsonMoonClient.hasBanner;
 import static draylar.crimsonmoon.CrimsonMoonClient.bannerTicks;
+import static draylar.crimsonmoon.CrimsonMoonClient.hasBanner;
 
 public class BannerTickHandler implements ClientTickEvents.StartTick {
 
@@ -17,6 +17,8 @@ public class BannerTickHandler implements ClientTickEvents.StartTick {
                 bannerTicks = 0;
                 hasBanner = false;
             }
+        } else {
+            bannerTicks = 0;
         }
     }
 }

@@ -2,6 +2,7 @@ package draylar.crimsonmoon;
 
 import draylar.crimsonmoon.impl.*;
 import draylar.crimsonmoon.impl.client.CrimsonShaderHandler;
+import draylar.crimsonmoon.impl.client.CrimsonStatusTickHandler;
 import draylar.crimsonmoon.network.ClientNetworking;
 import draylar.crimsonmoon.registry.CrimsonItems;
 import draylar.shaders.ExternalShader;
@@ -35,6 +36,7 @@ public class CrimsonMoonClient implements ClientModInitializer {
         ClientNetworking.init();
         ShaderRenderingEvents.RENDER_SHADERS.register(new CrimsonShaderHandler());
         ClientTickEvents.START_CLIENT_TICK.register(new BannerTickHandler());
+        ClientTickEvents.START_CLIENT_TICK.register(new CrimsonStatusTickHandler());
         HudRenderCallback.EVENT.register(new BannerHudRenderer());
 
         // Functionality dependent on config options
