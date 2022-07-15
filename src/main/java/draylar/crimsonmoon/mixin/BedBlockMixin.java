@@ -6,7 +6,7 @@ import net.minecraft.block.BedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -25,7 +25,7 @@ public class BedBlockMixin {
     private void onTrySleep(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
         if(!world.isClient && WorldData.getData((ServerWorld) world, CrimsonMoon.CRIMSON_MOON_ACTIVE).isCrimsonMoon() && CrimsonMoon.CONFIG.disableBeds) {
             cir.setReturnValue(ActionResult.FAIL);
-            player.sendMessage(new TranslatableText("crimsonmoon.failed_sleep_" + world.random.nextInt(3)).formatted(Formatting.DARK_RED), true);
+            player.sendMessage(Text.translatable("crimsonmoon.failed_sleep_" + world.random.nextInt(3)).formatted(Formatting.DARK_RED), true);
         }
     }
 }

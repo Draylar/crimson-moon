@@ -10,12 +10,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 public class CrimsonMobHelper {
 
@@ -39,7 +39,7 @@ public class CrimsonMobHelper {
             if(random.nextFloat() <= phase.getChance()) {
                 Item item = MobEntity.getEquipmentForSlot(slot, phase.getLevel() + random.nextInt(phase.getMaxLevel() - phase.getLevel() + 1)); // i should be [0, 4]
 
-                if (item != null) {
+                if(item != null) {
                     entity.equipStack(slot, new ItemStack(item));
                 }
 
@@ -58,8 +58,8 @@ public class CrimsonMobHelper {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack itemStack = entity.getEquippedStack(slot);
 
-            if (!itemStack.isEmpty() && random.nextFloat() < 0.5F * phase.getLevel() / 2) {
-                entity.equipStack(slot, EnchantmentHelper.enchant(random, itemStack, (int)(5.0F + (phase.getLevel() / 2) * (float) random.nextInt(18)), false));
+            if(!itemStack.isEmpty() && random.nextFloat() < 0.5F * phase.getLevel() / 2) {
+                entity.equipStack(slot, EnchantmentHelper.enchant(random, itemStack, (int) (5.0F + (phase.getLevel() / 2) * (float) random.nextInt(18)), false));
             }
         }
 

@@ -23,8 +23,8 @@ import java.util.function.Supplier;
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin extends World {
 
-    private ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimensionType, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed) {
-        super(properties, registryRef, dimensionType, profiler, isClient, debugWorld, seed);
+    private ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, RegistryEntry<DimensionType> dimension, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed, int maxChainedNeighborUpdates) {
+        super(properties, registryRef, dimension, profiler, isClient, debugWorld, seed, maxChainedNeighborUpdates);
     }
 
     @Inject(
@@ -46,10 +46,10 @@ public abstract class ServerWorldMixin extends World {
 
             // It is the end of the day (13000 time).
             // We exclude 0 because it returns true for modulus, which resulted in a weird bug.
-            if (cappedDayTime != 0 && cappedDayTime % 13000 == 0) {
+            if(cappedDayTime != 0 && cappedDayTime % 13000 == 0) {
 
                 ActionResult test = CrimsonMoonEvents.BEFORE_START.invoker().test(world);
-                if (test != ActionResult.FAIL) {
+                if(test != ActionResult.FAIL) {
                     data.setCrimsonMoon(true);
                     CrimsonMoonEvents.START.invoker().run(world);
                 }
@@ -57,16 +57,16 @@ public abstract class ServerWorldMixin extends World {
         }
 
         // Morning time! Finish the Crimson Moon if it is active.
-        if (cappedDayTime != 0 && cappedDayTime % 23031 == 0) {
-            if (data.isCrimsonMoon()) {
+        if(cappedDayTime != 0 && cappedDayTime % 23031 == 0) {
+            if(data.isCrimsonMoon()) {
                 data.setCrimsonMoon(false);
                 CrimsonMoonEvents.END.invoker().run(world, false);
             }
         }
 
         // Ensure it is not day time with a Crimson Moon for cases like /time add, but don't log
-        else if (cappedDayTime > 23031 || cappedDayTime < 13000) {
-            if (data.isCrimsonMoon()) {
+        else if(cappedDayTime > 23031 || cappedDayTime < 13000) {
+            if(data.isCrimsonMoon()) {
                 data.setCrimsonMoon(false);
                 CrimsonMoonEvents.END.invoker().run(world, true);
             }

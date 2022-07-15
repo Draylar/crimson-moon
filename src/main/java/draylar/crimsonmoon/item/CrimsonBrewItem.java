@@ -8,8 +8,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.stat.Stats;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -90,6 +90,6 @@ public class CrimsonBrewItem extends Item {
 
     @Override
     public Text getName(ItemStack stack) {
-        return ((TranslatableText) super.getName(stack)).formatted(Formatting.DARK_RED);
+        return ((MutableText) super.getName(stack)).formatted(Formatting.DARK_RED);
     }
 }

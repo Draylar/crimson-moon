@@ -24,7 +24,7 @@ import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
@@ -61,7 +61,7 @@ public class CrimsonEventHandlers {
         // Send players an action bar message when the Crimson Moon is over
         CrimsonMoonEvents.END.register((world, forced) -> {
             if(!forced) {
-                MutableText message = new TranslatableText("crimsonmoon.ending").formatted(Formatting.RED);
+                MutableText message = Text.translatable("crimsonmoon.ending").formatted(Formatting.RED);
                 for (ServerPlayerEntity player : world.getPlayers()) {
                     player.sendMessage(message, true);
                 }

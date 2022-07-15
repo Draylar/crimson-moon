@@ -5,9 +5,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
 import static draylar.crimsonmoon.CrimsonMoonClient.*;
@@ -44,8 +44,8 @@ public class BannerHudRenderer implements HudRenderCallback {
             matrices.pop();
 
             // Render text on top of the banner
-            MutableText crimson_moon = new LiteralText("Crimson Moon").setStyle(Style.EMPTY.withBold(true));
-            MutableText text = new LiteralText("The grounds tremble...").setStyle(Style.EMPTY.withBold(true));
+            MutableText crimson_moon = Text.literal("Crimson Moon").setStyle(Style.EMPTY.withBold(true));
+            MutableText text = Text.literal("The grounds tremble...").setStyle(Style.EMPTY.withBold(true));
             int titleWidth = MinecraftClient.getInstance().textRenderer.getWidth(crimson_moon);
             int hintWidth = MinecraftClient.getInstance().textRenderer.getWidth(text);
             MinecraftClient.getInstance().textRenderer.draw(matrices, crimson_moon, width - titleWidth / 2f, 10, 0x5F0713);
